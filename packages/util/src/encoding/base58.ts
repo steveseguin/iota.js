@@ -41,7 +41,7 @@ export class Base58 {
         }
 
         const size = Math.trunc((base58.length * 733) / 1000) + 1;
-        const b256 = size <= 128 ? new Uint8Array(128).fill(0) : Buffer.alloc(size);
+        const b256 = new Uint8Array(size);
 
         let length = 0;
 
@@ -105,7 +105,7 @@ export class Base58 {
         }
 
         const size = Math.trunc(((bytes.length - zeroes) * 138) / 100) + 1;
-        const b58 = size <= 128 ? new Uint8Array(128).fill(0) : Buffer.alloc(size);
+        const b58 = new Uint8Array(size);
 
         let length = 0;
 
