@@ -26,6 +26,17 @@ describe("Sha1", () => {
         expect(Converter.bytesToHex(digest)).toEqual("2fd4e1c67a2d28fced849ee1bb76e7391b93eb12");
     });
 
+    test("Can hash a long stream without losing state precision", () => {
+        // Reuse a small chunk to hash 256 MiB without allocating the whole input.
+        // Unbounded state accumulation used to lose integer precision at this size.
+        const chunk = new Uint8Array(65536).fill(0x61);
+        const sha = new Sha1();
+        for (let i = 0; i < 4096; i++) {
+            sha.update(chunk);
+        }
+        expect(Converter.bytesToHex(sha.digest())).toEqual("73f7331b2601d64a0615001478746b2b456d54fb");
+    }, 120000);
+
     test("Can verify with test vectors", () => {
         for (const test of testData) {
             expect(Converter.bytesToHex(Sha1.sum(Converter.hexToBytes(test.input)))).toEqual(test.hash);

@@ -402,10 +402,10 @@ export class Sha1 {
             c = (c << 30) | (c >>> 2);
         }
 
-        this.h0 = Math.trunc(this.h0 + a);
-        this.h1 = Math.trunc(this.h1 + b);
-        this.h2 = Math.trunc(this.h2 + c);
-        this.h3 = Math.trunc(this.h3 + d);
-        this.h4 = Math.trunc(this.h4 + e);
+        this.h0 = (this.h0 + a) | 0;
+        this.h1 = (this.h1 + b) | 0;
+        this.h2 = (this.h2 + c) | 0;
+        this.h3 = (this.h3 + d) | 0;
+        this.h4 = (this.h4 + e) | 0;
     }
 }
