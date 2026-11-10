@@ -96,6 +96,31 @@ describe("UnitsHelper", () => {
         expect(() => UnitsHelper.convertUnits(1.23, "i", "Ki")).toThrow("integer");
     });
 
+    test("convertUnits should preserve digits in scientific notation", () => {
+        const cases: { input: number; unit: Units; output: number }[] = [
+            { input: 11, unit: "Gi", output: 0.000000011 },
+            { input: 19, unit: "Gi", output: 0.000000019 },
+            { input: 99, unit: "Gi", output: 0.000000099 },
+            { input: 123456, unit: "Ti", output: 0.000000123456 },
+            { input: 123456789, unit: "Pi", output: 0.000000123456789 }
+        ];
+        for (const entry of cases) {
+            expect(UnitsHelper.convertUnits(entry.input, "i", entry.unit)).toEqual(entry.output);
+            expect(UnitsHelper.convertUnits(-entry.input, "i", entry.unit)).toEqual(-entry.output);
+        }
+    });
+
+    test("formatUnits should preserve scientific notation digits before formatting", () => {
+        expect(UnitsHelper.formatUnits(11, "Gi", 9)).toEqual("0.000000011 Gi");
+        expect(UnitsHelper.formatUnits(-19, "Gi", 9)).toEqual("-0.000000019 Gi");
+    });
+
+    test("convertUnits should truncate sub-iota fractions without rounding", () => {
+        expect(UnitsHelper.convertUnits(0.00000000199, "Gi", "Ti")).toEqual(0.000000000001);
+        expect(UnitsHelper.convertUnits(0.000000000000000199, "Ki", "Gi")).toEqual(0);
+        expect(UnitsHelper.convertUnits(-0.00000000199, "Gi", "Ti")).toEqual(-0.000000000001);
+    });
+
     test("convertUnits should calculate the value with new units", () => {
         const results: { input: number; from: Units; to: Units; output: number }[] = [
             { input: 1, from: "i", to: "i", output: 1 },
