@@ -112,11 +112,12 @@ export class UnitsHelper {
         // fixed decimal places as it will round, which we don't want
         // instead we want to convert the value to a string and manually
         // truncate the number of digits after the decimal
-        // Unfortunately large numbers end up in scientific notation with
+        // Unfortunately small numbers end up in scientific notation with
         // the regular toString() so we use a custom conversion.
         let fixed = scaledValue.toString();
-        if (fixed.includes("e")) {
-            fixed = scaledValue.toFixed(Number.parseInt(fixed.split("-")[1], 10));
+        const [mantissa, exponent] = fixed.split("e-");
+        if (exponent) {
+            fixed = `0.${"0".repeat(Number.parseInt(exponent, 10) - 1)}${mantissa.replace(".", "")}`;
         }
 
         // Now we have the number as a full string we can split it into
