@@ -40,10 +40,10 @@ export class B1T6 {
     ];
 
     /**
-     * Trites per tryte.
+     * Trits per byte.
      * @internal
      */
-    private static readonly TRITS_PER_TRYTE: number = 3;
+    private static readonly TRITS_PER_BYTE: number = 6;
 
     /**
      * The encoded length of the data.
@@ -51,7 +51,7 @@ export class B1T6 {
      * @returns The encoded length.
      */
     public static encodedLen(data: Uint8Array): number {
-        return data.length * B1T6.TRITS_PER_TRYTE;
+        return data.length * B1T6.TRITS_PER_BYTE;
     }
 
     /**
@@ -77,7 +77,7 @@ export class B1T6 {
             dst[startIndex + j + 4] = B1T6.TRYTE_VALUE_TO_TRITS[quo][1];
             dst[startIndex + j + 5] = B1T6.TRYTE_VALUE_TO_TRITS[quo][2];
 
-            j += 6;
+            j += B1T6.TRITS_PER_BYTE;
         }
         return j;
     }
